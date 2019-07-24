@@ -24,7 +24,7 @@ extra-source-files:  CHANGELOG.md
 
 cabal-version:       2.0
 
-executable htdp-image-example
+executable tromino-tile
   main-is:             Main.lhs
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:

@@ -116,7 +116,7 @@ For easiness, assume that the four boards are setup as follows:
  A   |   B
      |
 -----------
-     |    
+     |
  C   |   D
 
 All we need now is a stategy to solve B, C, and D so that we can solve the whole board.
@@ -162,7 +162,7 @@ Now that we our helper function ready, let's right a function that solves a bigg
 it into four boards, as we did above.
 
 \begin{code}
-solveInd :: Int -> Posn -> State StdGen Image 
+solveInd :: Int -> Posn -> State StdGen Image
 solveInd n p = do
   let ([tl, tr, bl, br], rot) = findPosnsAndRotation n p
   tlBoard <- solve (pred n) tl -- solve defined later, don't worry!

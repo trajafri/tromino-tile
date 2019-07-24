@@ -14,6 +14,7 @@ module Main where
 import           Control.Monad.State
 import           Graphics.Htdp
 import           System.Random
+import           System.Environment
 
 \end{code}
 
@@ -184,6 +185,8 @@ solveInd n p = do
 That's it! our application is now ready. All left is a function that decides whether
 we need the base case or the inductive case, and a main.
 
+In main, we also place a circle at the position specified.
+
 \begin{code}
 solve :: Int -> Posn -> State StdGen Image
 solve 1 = solveBase
@@ -191,10 +194,7 @@ solve n = (n `solveInd`)
 
 main :: IO ()
 main = do g <- getStdGen
-          print "Enter `n`, such that the board is 2^n x 2^n"
-          nLine <- getLine
-          print "Enter (x, y), such that the x and y are positions on a 2^n x 2^n board (0 indexed)."
-          pLine <- getLine
+          [nLine, pLine] <- getArgs
           let n      = read nLine
           let (x, y) = read pLine
           let (ans, _) = (`runState` g) . solve n $ (round x, round y)

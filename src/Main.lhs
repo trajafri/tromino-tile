@@ -196,9 +196,10 @@ solve n = (n `solveInd`)
 
 main :: IO ()
 main = do g <- getStdGen
-          [nLine, pLine] <- getArgs
+          [nLine, xLine, yLine] <- getArgs
           let n      = read nLine
-          let (x, y) = read pLine
+          let x = read xLine
+          let y = read yLine
           let (ans, _) = (`runState` g) . solve n $ (round x, round y)
           drawImage $ placeImage (circle (tileSize / 2) solid black)
                                  ((x * tileSize) + (tileSize / 2)) ((y * tileSize) + (tileSize / 2)) ans

@@ -158,6 +158,8 @@ we convert the position so that it's relative to the board it belongs in.
 For example, in a 2^2 x 2^2 (or 4 x 4 board), `divLen` = 2, and position (3, 3) belings in the bottom
 right corner. So, if we wanted (3, 3) to be shown in a (2 x 2) board, that would be (3 - 2, 3 - 2)
 
+Similarly, in variables like `aBoardBR`, we are finding the corner positions, which is some combination
+of 0 and `divLen`.
 
 Now that we our helper function ready, let's right a function that solves a bigger board by dividing
 it into four boards, as we did above.

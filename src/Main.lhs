@@ -38,6 +38,21 @@ tromino c = aboveAlign low sq $ beside sq sq
   sq = square tileSize solid c
 \end{code}
 
+While we are at it, let's also make a function that creates a random color.
+
+\begin{code}
+colorR :: State StdGen Color
+colorR = do
+  g0 <- get
+  let (r, g1) = randomR range g0
+  let (g, g2) = randomR range g1
+  let (b, g3) = randomR range g2
+  put g3
+  return $ makeColorI r g b 250
+  where range = (0, 250)
+
+\end{code}
+
 Since we are solving this problem inductively, lets think of our base case.
 
 The smallest possible board that can be solved in a way described above is a four by four
@@ -70,12 +85,8 @@ type Posn = (Int, Int) -- Zero indexed position on a board in screen coordinate 
 
 solveBase :: Posn -> State StdGen Image
 solveBase p = do
-  g0 <- get
-  let (r, g1) = randomR range g0
-  let (g, g2) = randomR range g1
-  let (b, g3) = randomR range g2
-  let trom    = tromino $ makeColorI r g b 250
-  put g3
+  c <- colorR
+  let trom = tromino $ c
   return $ rotation trom
  where
   rotation = case p of
@@ -83,7 +94,6 @@ solveBase p = do
     (0, 1) -> bottLeftEmpty
     (1, 0) -> topRightEmpty
     _      -> bottRightEmpty
-  range = (0, 250)
 \end{code}
 
 All's good so far. Now, for the inductive step.
@@ -172,15 +182,10 @@ solveInd n p = do
   trBoard <- solve (pred n) tr
   blBoard <- solve (pred n) bl
   brBoard <- solve (pred n) br
-  g0      <- get
-  let (r, g1) = randomR range g0
-  let (g, g2) = randomR range g1
-  let (b, g3) = randomR range g2
-  return $ overlay (rot . tromino $ makeColorI r g b 250)
+  c       <- colorR
+  return $ overlay (rot . tromino $ c)
                   $ above (beside tlBoard trBoard)
                           (beside blBoard brBoard)
-  where range = (0, 250)
-
 
 \end{code}
 

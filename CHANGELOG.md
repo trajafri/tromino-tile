@@ -1,5 +1,6 @@
 # Revision history for htdp-image-example
 
-## 0.1.0.0 -- YYYY-mm-dd
+## 0.1.0.0 -- 2019-07-23
 
-* First version. Released on an unsuspecting world.
+* Added tromino-tile.
+* Simple solution with no error checking.

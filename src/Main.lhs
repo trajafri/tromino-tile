@@ -142,17 +142,17 @@ Now lets write the idea above in a programmatic way.
 
 First, let's make a function that takes and int `n` and a position `p` in a (2^n x 2^n) board,
 and returns two things:
-1. list of four positions that don't need to be filled in the four boards that are created from
-   a bigger board (as shown in above).
+1. Four positions that don't need to be filled in the four boards that are created from
+   a bigger board (as shown in the example above).
 2. The tromino rotation so that it fits in the middle of the four boards
 
 \begin{code}
-findPosnsAndRotation :: Int -> Posn -> ([Posn], Image -> Image)
+findPosnsAndRotation :: Int -> Posn -> (Posn, Posn, Posn, Posn, Image -> Image)
 findPosnsAndRotation n (x, y)
-  | x <  divLen && y <  divLen = ([(x, y), bBoardBL, cBoardTR, dBoardTL], topLeftEmpty)
-  | x >= divLen && y <  divLen = ([aBoardBR, (x - divLen, y), cBoardTR, dBoardTL], topRightEmpty)
-  | x <  divLen && y >= divLen = ([aBoardBR, bBoardBL, (x, y - divLen), dBoardTL], bottLeftEmpty)
-  | x >= divLen && y >= divLen = ([aBoardBR, bBoardBL, cBoardTR, (x - divLen, y - divLen)], bottRightEmpty)
+  | x <  divLen && y <  divLen = ((x, y), bBoardBL, cBoardTR, dBoardTL, topLeftEmpty)
+  | x >= divLen && y <  divLen = (aBoardBR, (x - divLen, y), cBoardTR, dBoardTL, topRightEmpty)
+  | x <  divLen && y >= divLen = (aBoardBR, bBoardBL, (x, y - divLen), dBoardTL, bottLeftEmpty)
+  | x >= divLen && y >= divLen = (aBoardBR, bBoardBL, cBoardTR, (x - divLen, y - divLen), bottRightEmpty)
   where aBoardBR = (pred divLen , pred divLen)
         bBoardBL = (0           , pred divLen)
         cBoardTR = (pred divLen , 0)
@@ -169,15 +169,15 @@ For example, in a 2^2 x 2^2 (or 4 x 4 board), `divLen` = 2, and position (3, 3) 
 right corner. So, if we wanted (3, 3) to be shown in a (2 x 2) board, that would be (3 - 2, 3 - 2)
 
 Similarly, in variables like `aBoardBR`, we are finding the corner positions, which is some combination
-of 0 and `divLen`.
+of 0 and `divLen - 1`.
 
-Now that we our helper function ready, let's right a function that solves a bigger board by dividing
+Now that we our helper function ready, let's write a function that solves a bigger board by dividing
 it into four boards, as we did above.
 
 \begin{code}
 solveInd :: Int -> Posn -> State StdGen Image
 solveInd n p = do
-  let ([tl, tr, bl, br], rot) = findPosnsAndRotation n p
+  let (tl, tr, bl, br, rot) = findPosnsAndRotation n p
   tlBoard <- solve (pred n) tl -- solve defined later, don't worry!
   trBoard <- solve (pred n) tr
   blBoard <- solve (pred n) bl

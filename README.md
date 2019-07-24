@@ -7,11 +7,11 @@ This is a simple example of a program that uses the htdp-image library.
 
 ## Usage
 
-tromino-tile 5 25 25
+``tromino-tile 5 25 25``
 
 ![alt text](https://raw.githubusercontent.com/trajafri/tromino-tile/master/examples/five-example.png "twoToFiveExample")
 
 
-tromino-tile 3 2 5
+``tromino-tile 3 2 5``
 
 ![alt text](https://raw.githubusercontent.com/trajafri/tromino-tile/master/examples/three-example.png "twoToThreeExample")

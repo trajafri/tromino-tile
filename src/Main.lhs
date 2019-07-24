@@ -5,9 +5,9 @@ problem with the htdp-image library. Before we start, let's get some
 unecessary work out of the way.
 
 This program will use Graphics.Htdp to present the solution, System.Random
-
-for random number generators, and Control.Monad.State to make it easy for
-our implementation to carry around the random number generator.
+for random number generators, Control.Monad.State to make it easy for
+our implementation to carry around the random number generator, and finally,
+System.Environment for command line interaction.
 
 \begin{code}
 module Main where

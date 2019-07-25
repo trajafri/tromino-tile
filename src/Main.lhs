@@ -84,11 +84,8 @@ and the state monad to carry around the generator.
 type Posn = (Int, Int) -- Zero indexed position on a board in screen coordinate system
 
 solveBase :: Posn -> State StdGen Image
-solveBase p = do
-  c <- colorR
-  let trom = tromino $ c
-  return $ rotation trom
- where
+solveBase p = return . rotation . tromino =<< colorR
+  where
   rotation = case p of
     (0, 0) -> topLeftEmpty
     (0, 1) -> bottLeftEmpty

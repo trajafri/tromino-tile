@@ -1,8 +1,6 @@
 # Tromino-Tile
 
-This is a simple example of a program that uses the htdp-image library.
-
-(The library isn't up yet, but will be up as soon as the documentation is ready)
+This is a simple example of a program that uses the [htdp-image](http://hackage.haskell.org/package/htdp-image-1.0.0.0) library.
 
 
 ## Usage

@@ -7,12 +7,13 @@ unecessary work out of the way.
 This program will use Graphics.Htdp to present the solution, System.Random
 for random number generators, Control.Monad.State to make it easy for
 our implementation to carry around the random number generator, and finally,
-System.Environment for command line interaction.
+System.Console.ArgParser for command line interaction.
 
 \begin{code}
 module Main where
 import           Control.Monad.State
 import           Graphics.Htdp
+import           System.Console.ArgParser
 import           System.Random
 import           System.Environment
 
@@ -196,13 +197,24 @@ solve :: Int -> Posn -> State StdGen Image
 solve 1 = solveBase
 solve n = (n `solveInd`)
 
+-- Code required for command line interaction
+
+cliParser :: ParserSpec (Int, Float, Float)
+cliParser = mkTuple `parsedBy` reqPos "n"
+                       `andBy` reqPos "x"
+                       `andBy` reqPos "y"
+  where mkTuple :: Int -> Float -> Float -> (Int, Float, Float)
+        mkTuple n x y = (n, x, y) -- Could use tuple sections here too
+
+-- Using the command line arguments to generate solution with `solve`,
+-- and placing a circle at the specified location.
+
 main :: IO ()
-main = do g <- getStdGen
-          [nLine, xLine, yLine] <- getArgs
-          let n      = read nLine
-          let x = read xLine
-          let y = read yLine
-          let (ans, _) = (`runState` g) . solve n $ (round x, round y)
-          drawImage $ placeImage (circle (tileSize / 2) solid black)
-                                 ((x * tileSize) + (tileSize / 2)) ((y * tileSize) + (tileSize / 2)) ans
+main = withParseResult cliParser
+     $ \(n, x, y) ->
+         do g <- getStdGen
+            let (ans, _) = (`runState` g) . solve n $ (round x, round y)
+            drawImage $ placeImage (circle (tileSize / 2) solid black)
+                                   (x * tileSize + tileSize / 2)
+                                   (y * tileSize + tileSize / 2) ans
 \end{code}

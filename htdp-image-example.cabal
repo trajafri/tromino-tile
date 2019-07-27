@@ -28,7 +28,8 @@ executable tromino-tile
   main-is:             Main.lhs
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:
-  build-depends:       base >=4.12 && <4.13,
+  build-depends:       argparser >=0.3.4 && <1.0.0,
+                       base >=4.12 && <4.13,
                        htdp-image >=1.0.0 && <2.0.0,
                        random ^>=1.0.0,
                        mtl    >=2.0.0

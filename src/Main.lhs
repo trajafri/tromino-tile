@@ -15,7 +15,6 @@ import           Control.Monad.State
 import           Graphics.Htdp
 import           System.Console.ArgParser
 import           System.Random
-import           System.Environment
 
 \end{code}
 
@@ -212,9 +211,17 @@ cliParser = mkTuple `parsedBy` reqPos "n"
 main :: IO ()
 main = withParseResult cliParser
      $ \(n, x, y) ->
-         do g <- getStdGen
+         do
+            verifySize n
+            verifyBounds n x y
+            g <- getStdGen
             let (ans, _) = (`runState` g) . solve n $ (round x, round y)
             drawImage $ placeImage (circle (tileSize / 2) solid black)
                                    (x * tileSize + tileSize / 2)
                                    (y * tileSize + tileSize / 2) ans
+  where verifySize n       = when (n < 1) $ fail "In a (2^n x 2^n) board,\ 
+                                               \n should be greater than 0"
+        verifyBounds n x y = when (x < 0 || x > len || y < 0 || y > len) $
+                                fail "Given position is out of bounds"
+          where len = pred $ 2 ^ n
 \end{code}

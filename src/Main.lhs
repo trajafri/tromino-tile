@@ -69,7 +69,7 @@ bottLeftEmpty :: Image -> Image
 bottLeftEmpty =  rotate 180
 
 bottRightEmpty :: Image -> Image
-bottRightEmpty =  rotate (270)
+bottRightEmpty =  rotate 270
 \end{code}
 
 So, the claim holds true for the base case.

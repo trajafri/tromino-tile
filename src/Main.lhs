@@ -7,13 +7,13 @@ unecessary work out of the way.
 This program will use Graphics.Htdp to present the solution, System.Random
 for random number generators, Control.Monad.State to make it easy for
 our implementation to carry around the random number generator, and finally,
-System.Console.ArgParser for command line interaction.
+Options.Applicative for command line interaction.
 
 \begin{code}
 module Main where
 import           Control.Monad.State
 import           Graphics.Htdp
-import           System.Console.ArgParser
+import           Options.Applicative
 import           System.Random
 
 \end{code}
@@ -198,19 +198,24 @@ solve n = (n `solveInd`)
 
 -- Code required for command line interaction
 
-cliParser :: ParserSpec (Int, Float, Float)
-cliParser = mkTuple `parsedBy` reqPos "n"
-                       `andBy` reqPos "x"
-                       `andBy` reqPos "y"
-  where mkTuple :: Int -> Float -> Float -> (Int, Float, Float)
-        mkTuple n x y = (n, x, y) -- Could use tuple sections here too
+cliParser :: Parser (Int, Float, Float)
+cliParser =
+  (,,)
+    <$> argument auto (metavar "N" <> help "Creates a board of size (2^N x 2^N)")
+        <*> argument auto (metavar "X" <> help "X position")
+        <*> argument auto (metavar "Y" <> help "Y Position")
 
+opts :: ParserInfo (Int, Float, Float)
+opts = info (cliParser <**> helper)
+            (fullDesc
+               <> progDesc "Solve a (2^N x 2^N) sized board where tile at position (X, Y) is empty"
+               <> header "tromino-tile - Solve instances of tromino-tiling problem"
+            )
 -- Using the command line arguments to generate solution with `solve`,
 -- and placing a circle at the specified location.
 
 main :: IO ()
-main = withParseResult cliParser
-     $ \(n, x, y) ->
+main = execParser opts >>= \(n, x, y) ->
          do
             verifySize n
             verifyBounds n x y
